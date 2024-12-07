@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Scene</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: black;
+      overflow: hidden;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .swing-container {
+      position: absolute;
+      top: 0;
+      left: 40%; /* Move the image 40% from the left edge */
+      transform: translateX(-50%); /* Keep the image centered relative to its new position */
+      animation: swing 4s infinite ease-in-out; /* Swing speed */
+      transform-origin: top center;
+      display: none; /* Hide initially */
+    }
+
+    .swing-container img {
+      width: 150px; /* Adjust image size */
+      height: auto;
+      filter: grayscale(100%);
+    }
+
+    .stars-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: white;
+      border-radius: 50%;
+      animation: fall 5s linear forwards; /* Star fall duration */
+    }
+
+    @keyframes swing {
+      0% { transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
+      100% { transform: rotate(-10deg); }
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+
+    .footer-text {
+      position: absolute;
+      top: 50%; /* Center vertically */
+      left: 50%; /* Center horizontally */
+      transform: translate(-50%, -50%); /* Offset for perfect centering */
+      font-size: 23px; /* Larger font size */
+      letter-spacing: 4px;
+      text-align: center;
+      line-height: 1.5; /* Adjust line height for spacing between text */
+      display: none; /* Hide initially */
+    }
+
+    .click-to-enter {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    audio {
+      display: none; /* Hide audio controls */
+    }
+  </style>
+</head>
+<body>
+  <!-- Click to Enter Text -->
+  <div class="click-to-enter" id="clickToEnter">
+    Click to Enter the Website
+  </div>
+
+  <!-- Swinging Image -->
+  <div class="swing-container" id="swingContainer">
+    <img src="https://www.dropbox.com/scl/fi/amctlvk2vjjlpegskfqfw/girl.png?rlkey=5ffxxsl7lu4t8eswoaclhcoyi&raw=1" alt="Swinging Girl">
+  </div>
+
+  <!-- Falling Stars -->
+  <div class="stars-container" id="starsContainer"></div>
+
+  <!-- Initially Hidden Text -->
+  <div class="footer-text" id="footerText">
+    wafzthkin<br>syskey
+  </div>
+
+  <!-- Audio Player (hidden) -->
+  <audio id="audioPlayer" loop>
+    <source src="https://www.dropbox.com/scl/fi/lf4lbuwqb9bhxqe0ovsim/music.mp3?rlkey=xki62wdnairndnzybtuhixsd4&st=qferlodv&dl=1" type="audio/mp3">
+  </audio>
+
+  <script>
+    // Wait for the user to click anywhere on the page
+    document.body.addEventListener('click', () => {
+      // Show the click-to-enter text
+      document.getElementById('clickToEnter').style.display = 'none';
+      
+      // Show the rest of the content (image, stars)
+      document.getElementById('swingContainer').style.display = 'block';
+      document.getElementById('starsContainer').style.display = 'block';
+      
+      // Show the footer text after click
+      document.getElementById('footerText').style.display = 'block';
+
+      // Start audio automatically
+      const audioPlayer = document.getElementById('audioPlayer');
+      audioPlayer.play(); // Start the audio
+
+      // Falling stars script
+      const starsContainer = document.querySelector('.stars-container');
+
+      setInterval(() => {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * window.innerWidth + 'px';
+        star.style.top = '0px';
+        starsContainer.appendChild(star);
+
+        // Remove the star after animation ends
+        setTimeout(() => {
+          star.remove();
+        }, 5000); // Matches animation duration
+      }, 500); // Adjust spawn interval (lower = more stars)
+    });
+  </script>
+</body>
+</html>
