@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Interactive Scene</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
@@ -11,7 +12,7 @@
       background: black;
       overflow: hidden;
       color: white;
-      font-family: Arial, sans-serif;
+      font-family: 'Cinzel Decorative', cursive;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -19,18 +20,43 @@
       position: relative;
     }
 
+    .welcome-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9); /* Slight transparency */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      color: white;
+      text-align: center;
+    }
+
+    .welcome-screen p {
+      font-size: 24px;
+      margin: 0;
+      padding: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
     .swing-container {
       position: absolute;
       top: 0;
-      left: 40%; /* Move the image 40% from the left edge */
-      transform: translateX(-50%); /* Keep the image centered relative to its new position */
+      left: 41%; /* Adjust this value to move the image horizontally */
+      transform: translateX(-40%); /* Adjust this value for fine-tuning */
       animation: swing 4s infinite ease-in-out; /* Swing speed */
       transform-origin: top center;
-      display: none; /* Hide initially */
     }
 
     .swing-container img {
-      width: 150px; /* Adjust image size */
+      width: 200px; /* Increased image size */
       height: auto;
       filter: grayscale(100%);
     }
@@ -68,26 +94,13 @@
 
     .footer-text {
       position: absolute;
-      top: 50%; /* Center vertically */
+      top: 70%; /* Lower the text */
       left: 50%; /* Center horizontally */
       transform: translate(-50%, -50%); /* Offset for perfect centering */
-      font-size: 23px; /* Larger font size */
-      letter-spacing: 4px;
+      font-size: 32px; /* Smaller font size */
+      font-weight: 400; /* Regular weight for the fancy font */
+      letter-spacing: 2px;
       text-align: center;
-      line-height: 1.5; /* Adjust line height for spacing between text */
-      display: none; /* Hide initially */
-    }
-
-    .click-to-enter {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-      font-weight: bold;
-      color: white;
-      text-align: center;
-      cursor: pointer;
     }
 
     audio {
@@ -96,21 +109,21 @@
   </style>
 </head>
 <body>
-  <!-- Click to Enter Text -->
-  <div class="click-to-enter" id="clickToEnter">
-    Click to Enter the Website
+  <!-- Welcome Screen -->
+  <div class="welcome-screen" id="welcomeScreen">
+    <p>Click anywhere to enter the website</p>
   </div>
 
   <!-- Swinging Image -->
-  <div class="swing-container" id="swingContainer">
+  <div class="swing-container hidden" id="mainContent">
     <img src="https://www.dropbox.com/scl/fi/amctlvk2vjjlpegskfqfw/girl.png?rlkey=5ffxxsl7lu4t8eswoaclhcoyi&raw=1" alt="Swinging Girl">
   </div>
 
   <!-- Falling Stars -->
-  <div class="stars-container" id="starsContainer"></div>
+  <div class="stars-container hidden"></div>
 
-  <!-- Initially Hidden Text -->
-  <div class="footer-text" id="footerText">
+  <!-- Centered Text -->
+  <div class="footer-text hidden">
     wafzthkin<br>syskey
   </div>
 
@@ -120,38 +133,34 @@
   </audio>
 
   <script>
-    // Wait for the user to click anywhere on the page
-    document.body.addEventListener('click', () => {
-      // Show the click-to-enter text
-      document.getElementById('clickToEnter').style.display = 'none';
-      
-      // Show the rest of the content (image, stars)
-      document.getElementById('swingContainer').style.display = 'block';
-      document.getElementById('starsContainer').style.display = 'block';
-      
-      // Show the footer text after click
-      document.getElementById('footerText').style.display = 'block';
+    // Show main content after clicking the welcome screen
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const mainContent = document.getElementById('mainContent');
+    const starsContainer = document.querySelector('.stars-container');
+    const footerText = document.querySelector('.footer-text');
+    const audioPlayer = document.getElementById('audioPlayer');
 
-      // Start audio automatically
-      const audioPlayer = document.getElementById('audioPlayer');
-      audioPlayer.play(); // Start the audio
-
-      // Falling stars script
-      const starsContainer = document.querySelector('.stars-container');
-
-      setInterval(() => {
-        const star = document.createElement('div');
-        star.className = 'star';
-        star.style.left = Math.random() * window.innerWidth + 'px';
-        star.style.top = '0px';
-        starsContainer.appendChild(star);
-
-        // Remove the star after animation ends
-        setTimeout(() => {
-          star.remove();
-        }, 5000); // Matches animation duration
-      }, 500); // Adjust spawn interval (lower = more stars)
+    welcomeScreen.addEventListener('click', () => {
+      welcomeScreen.classList.add('hidden'); // Hide welcome screen
+      mainContent.classList.remove('hidden'); // Show main content
+      starsContainer.classList.remove('hidden');
+      footerText.classList.remove('hidden');
+      audioPlayer.play(); // Start audio
     });
+
+    // Falling stars script
+    setInterval(() => {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * window.innerWidth + 'px';
+      star.style.top = '0px';
+      starsContainer.appendChild(star);
+
+      // Remove the star after animation ends
+      setTimeout(() => {
+        star.remove();
+      }, 5000); // Matches animation duration
+    }, 500); // Adjust spawn interval (lower = more stars)
   </script>
 </body>
 </html>
